@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana-endpoint
+  namespace: argo-cd
+  # Add a this finalizer ONLY if you want these to cascade delete.
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: yany-apps
+  
+  source:
+    repoURL: https://github.com/yany-ops/argocd-apps.git
+    targetRevision: HEAD
+    path: charts/service-endpoint
+    helm:
+      valuesObject:
+        domain: grafana.ops.cluster.yanychoi.com
+        port: "80"
+        serviceName: grafana
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: grafana
+  
+  syncPolicy:
+    # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.  
+    syncOptions:
+      - CreateNamespace=false
