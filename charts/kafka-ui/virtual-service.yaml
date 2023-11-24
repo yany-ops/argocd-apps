@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: kafka-ui-vs
+spec:
+  hosts:
+  - kafka.ops.cluster.yanychoi.com
+  gateways:
+  - kafka-ui-gw
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: kafka-ui

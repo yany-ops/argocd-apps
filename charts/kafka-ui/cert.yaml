@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kafka-ui-cert
+  namespace: istio-system # istio 설치경로
+spec:
+  secretName: kafka-ui-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: kafka.ops.cluster.yanychoi.com
+  dnsNames:
+  - kafka.ops.cluster.yanychoi.com
