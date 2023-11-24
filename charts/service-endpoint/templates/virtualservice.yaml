@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "service-endpoint.fullname" . }}-ingress-vs
+spec:
+  hosts:
+  - {{ .Values.domain }}
+  gateways:
+  - {{ include "service-endpoint.fullname" . }}-ingress-gw
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: {{ .Values.port }}
+        host: {{ .Values.serviceName }}
