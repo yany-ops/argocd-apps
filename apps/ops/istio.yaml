@@ -8,12 +8,12 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 
 spec:
-  project: default
+  project: yany-apps
   
   source:
     repoURL: https://github.com/yany-ops/argocd-apps.git
     targetRevision: HEAD
-    path: charts/ops/istio/base
+    path: charts/istio/base
     helm:
       releaseName: istio-crd
       valuesObject: {}
@@ -37,12 +37,12 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 
 spec:
-  project: default
+  project: yany-apps
   
   source:
     repoURL: https://github.com/yany-ops/argocd-apps.git
     targetRevision: HEAD
-    path: charts/ops/istio/istiod
+    path: charts/istio/istiod
     helm:
       releaseName: istiod
       valuesObject: {}
@@ -66,12 +66,12 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 
 spec:
-  project: default
+  project: yany-apps
   
   source:
     repoURL: https://github.com/yany-ops/argocd-apps.git
     targetRevision: HEAD
-    path: charts/ops/istio/gateway
+    path: charts/istio/gateway
     helm:
       releaseName: istio-ingressgateway
       valuesObject:
@@ -113,12 +113,12 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 
 spec:
-  project: default
+  project: yany-apps
   
   source:
     repoURL: https://github.com/yany-ops/argocd-apps.git
     targetRevision: HEAD
-    path: charts/ops/istio/gateway
+    path: charts/istio/gateway
     helm:
       releaseName: istio-egressgateway
       valuesObject:

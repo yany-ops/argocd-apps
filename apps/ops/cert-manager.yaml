@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nfs-provisioner-prod
+  name: cert-manager-ops
   namespace: argo-cd
   # Add a this finalizer ONLY if you want these to cascade delete.
   finalizers:
@@ -13,20 +13,16 @@ spec:
   source:
     repoURL: https://github.com/yany-ops/argocd-apps.git
     targetRevision: HEAD
-    path: charts/nfs-subdir-external-provisioner
+    path: charts/cert-manager
     helm:
       valuesObject:
-        nfs:
-          server: 192.168.10.30
-          path: /mnt/nfs/prod
-        storageClass:
-          defaultClass: true
+        installCRDs: true
   
   destination:
-    server: https://prod.cluster.yanychoi.com:6443
-    namespace: default
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
   
   syncPolicy:
     # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.  
     syncOptions:
-      - CreateNamespace=false
+      - CreateNamespace=true

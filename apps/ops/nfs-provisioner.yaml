@@ -8,12 +8,12 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 
 spec:
-  project: default
+  project: yany-apps
   
   source:
     repoURL: https://github.com/yany-ops/argocd-apps.git
     targetRevision: HEAD
-    path: charts/ops/nfs-subdir-external-provisioner
+    path: charts/nfs-subdir-external-provisioner
     helm:
       valuesObject:
         nfs:
