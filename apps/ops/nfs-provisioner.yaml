@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nfs-provisioner
+  namespace: argo-cd
+  # Add a this finalizer ONLY if you want these to cascade delete.
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  
+  source:
+    repoURL: https://github.com/yany-ops/argocd-apps.git
+    targetRevision: HEAD
+    path: charts/ops/nfs-subdir-external-provisioner
+    helm:
+      valuesObject:
+        nfs:
+          server: 192.168.10.30
+          path: /mnt/nfs/ops
+        storageClass:
+          defaultClass: true
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  
+  syncPolicy:
+    # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.  
+    syncOptions:
+      - CreateNamespace=false
