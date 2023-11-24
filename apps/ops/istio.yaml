@@ -1,0 +1,135 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-crd-ops
+  namespace: argo-cd
+  # Add a this finalizer ONLY if you want these to cascade delete.
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  
+  source:
+    repoURL: https://github.com/yany-ops/argocd-apps.git
+    targetRevision: HEAD
+    path: charts/ops/istio/base
+    helm:
+      releaseName: istio-crd
+      valuesObject: {}
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  
+  syncPolicy:
+    # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.  
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istiod-ops
+  namespace: argo-cd
+  # Add a this finalizer ONLY if you want these to cascade delete.
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  
+  source:
+    repoURL: https://github.com/yany-ops/argocd-apps.git
+    targetRevision: HEAD
+    path: charts/ops/istio/istiod
+    helm:
+      releaseName: istiod
+      valuesObject: {}
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  
+  syncPolicy:
+    # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.  
+    syncOptions:
+      - CreateNamespace=false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-ingressgateway-ops
+  namespace: argo-cd
+  # Add a this finalizer ONLY if you want these to cascade delete.
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  
+  source:
+    repoURL: https://github.com/yany-ops/argocd-apps.git
+    targetRevision: HEAD
+    path: charts/ops/istio/gateway
+    helm:
+      releaseName: istio-ingressgateway
+      valuesObject:
+        service:
+          type: NodePort
+          ports:
+          - name: status-port
+            nodePort: 30021
+            port: 15021
+            protocol: TCP
+            targetPort: 15021
+          - name: http2
+            nodePort: 30080
+            port: 80
+            protocol: TCP
+            targetPort: 80
+          - name: https
+            nodePort: 30443
+            port: 443
+            protocol: TCP
+            targetPort: 443
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  
+  syncPolicy:
+    # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.  
+    syncOptions:
+      - CreateNamespace=false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-egressgateway-ops
+  namespace: argo-cd
+  # Add a this finalizer ONLY if you want these to cascade delete.
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+
+spec:
+  project: default
+  
+  source:
+    repoURL: https://github.com/yany-ops/argocd-apps.git
+    targetRevision: HEAD
+    path: charts/ops/istio/gateway
+    helm:
+      releaseName: istio-egressgateway
+      valuesObject:
+        service:
+          type: ClusterIP
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  
+  syncPolicy:
+    # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.  
+    syncOptions:
+      - CreateNamespace=false
