@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argo-cd
+
+spec:
+  project: addons
+  source:
+    repoURL: https://github.com/yany-ops/argocd-apps.git
+    targetRevision: HEAD
+    path: manifests/cilium
+    kustomize:
+      buildOptions:
+      - --load-restrictor LoadRestrictionsNone
+      - --enable-helm
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    syncOptions:
+    - ApplyOutOfSyncOnly=true
