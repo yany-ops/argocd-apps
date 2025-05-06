@@ -11,4 +11,4 @@ helmCharts:
 
 resources:
 - ip-pool.yaml
-- l2-policy.yaml
+- l2policy.yaml
