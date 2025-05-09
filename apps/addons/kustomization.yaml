@@ -5,3 +5,4 @@ resources:
 - cilium.yaml
 - argocd.yaml
 - projects.yaml
+- prometheus.yaml
