@@ -8,3 +8,6 @@ helmCharts:
   namespace: prometheus
   version: 27.13.0
   valuesFile: values.yaml
+
+resources:
+- resources/virtualservice.yaml

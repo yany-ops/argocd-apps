@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: prometheus
+spec:
+  gateways:
+  - istio-system/mgmt-yanychoi-com
+  hosts:
+  - prom.mgmt.yanychoi.com
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: prometheus-server
+        port:
+          number: 80
